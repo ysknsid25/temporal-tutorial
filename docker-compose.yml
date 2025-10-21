@@ -1,0 +1,35 @@
+services:
+  temporal-tutorial-postgres:
+    image: postgres:13
+    container_name: temporal-tutorial-postgres
+    environment:
+      POSTGRES_DB: temporal
+      POSTGRES_USER: temporal
+      POSTGRES_PASSWORD: temporal
+    ports:
+      - "15432:5432"
+
+  temporal-tutorial:
+    image: temporalio/auto-setup:latest
+    container_name: temporal-tutorial
+    depends_on:
+      - temporal-tutorial-postgres
+    environment:
+      - DB=postgres12
+      - DB_PORT=5432
+      - POSTGRES_USER=temporal
+      - POSTGRES_PWD=temporal
+      - POSTGRES_SEEDS=temporal-tutorial-postgres
+    ports:
+      - "7233:7233"
+
+  temporal-web-tutorial:
+    image: temporalio/ui:latest
+    container_name: temporal-web-tutorial
+    depends_on:
+      - temporal-tutorial
+    environment:
+      - TEMPORAL_ADDRESS=temporal-tutorial:7233
+      - TEMPORAL_CORS_ORIGINS=http://localhost:8088
+    ports:
+      - "8088:8080"
