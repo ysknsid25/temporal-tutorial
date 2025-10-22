@@ -71,6 +71,9 @@ docker-compose logs postgresql
 Temporalサーバーが起動している状態で、Goアプリケーションを実行：
 
 ```bash
+# ワークフローの起動
+go run start/main.go
+
 # ワーカーの起動
 go run worker/main.go
 
